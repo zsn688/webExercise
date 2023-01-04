@@ -10,7 +10,7 @@ class App extends React.Component {
       { id: 2, name: 'rose', content: '板凳~' },
       { id: 3, name: 'tom', content: '楼主好人' }
     ],
-    userName: '123',
+    userName: '',
     userCommit: ''
   }
   clearFn = () => {
@@ -40,21 +40,38 @@ class App extends React.Component {
       comments: this.state.comments.filter( item => { return item.id !== id})
     })
   }
+  handleFn = (e) => {
+    // console.log(e.target.name)
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+
+  }
+  addFn = () => {
+    this.setState({
+      comments: [{ id: Date.now(), name: this.state.userName, content: this.state.userCommit }, ...this.state.comments],
+      userCommit: '',
+      userName: ''
+    })
+    
+  }
   render() {
     return (
       <div className="app">
         <div>
-          <input className="user" type="text" placeholder="请输入评论人" value={this.userName} onChange={ this.handleFn} />
+          <input className="user" type="text" placeholder="请输入评论人" value={this.state.userName} name="userName" onChange={ this.handleFn } />
           <br />
           <textarea
             className="content"
             cols="30"
             rows="10"
             placeholder="请输入评论内容"
-            value={this.userCommit}
+            value={this.state.userCommit}
+            name='userCommit'
+            onChange={ this.handleFn }
           />
           <br />
-          <button>发表评论</button>
+          <button onClick={this.addFn}>发表评论</button>
           <button onClick={this.clearFn}>清空评论</button>
         </div>
         {this.renderCommits()}
